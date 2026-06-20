@@ -1,10 +1,16 @@
-/* Voir DESIGN.md pour le contrat de design (palette, typo, espacements). */
+/* Voir DESIGN.md pour le contrat de design (palette, typo, espacements).
+   Ambiance : pixel-art clair — fond clair, accent indigo, touches 8-bit ludiques. */
 :root {
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
+  --color-bg: #f4f4fb;
+  --color-surface: #ffffff;
+  --color-text: #1a1a2e;
+  --color-muted: #6b6b80;
   --color-accent: #4f46e5;
-  --font-base: system-ui, -apple-system, sans-serif;
+  --color-accent-soft: #ece9fe;
+  --color-line: #1a1a2e;
+  --font-base: system-ui, -apple-system, "Segoe UI", sans-serif;
   --max: 1000px;
+  --radius: 4px; /* angles nets, esprit pixel */
 }
 
 * { box-sizing: border-box; margin: 0; }
@@ -12,33 +18,119 @@
 body {
   font-family: var(--font-base);
   color: var(--color-text);
-  background: var(--color-bg);
-  line-height: 1.5;
+  background:
+    var(--color-bg)
+    repeating-linear-gradient(0deg, transparent 0 7px, rgba(79, 70, 229, 0.03) 7px 8px);
+  line-height: 1.55;
+  display: flex; flex-direction: column; min-height: 100vh;
 }
 
+/* --- Bloc "pixel" : bordure nette + ombre décalée (style 8-bit) --- */
+.pixel {
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0 var(--color-line);
+}
+
+/* --- Nav --- */
 .nav {
   display: flex; align-items: center; justify-content: space-between;
-  max-width: var(--max); margin: 0 auto; padding: 1rem 1.25rem;
+  max-width: var(--max); width: 100%; margin: 0 auto; padding: 1.25rem 1.25rem;
 }
-.logo { font-weight: 800; }
+.logo { font-weight: 900; letter-spacing: 1px; font-size: 1.25rem; }
+.logo-accent { color: var(--color-accent); }
 
-/* Sélecteur de langue */
+/* --- Sélecteur de langue --- */
 .langs { display: flex; gap: 0.4rem; }
 .langs button {
-  border: 1px solid #ddd; background: transparent; color: inherit;
-  padding: 0.35rem 0.7rem; border-radius: 999px; cursor: pointer; font-weight: 600;
+  border: 2px solid var(--color-line); background: var(--color-surface); color: inherit;
+  padding: 0.3rem 0.65rem; border-radius: var(--radius); cursor: pointer; font-weight: 700;
+  font-size: 0.8rem;
 }
-.langs button.active { background: var(--color-accent); color: #fff; border-color: var(--color-accent); }
+.langs button.active { background: var(--color-accent); color: #fff; border-color: var(--color-line); }
 
-.hero {
-  min-height: 70vh; display: grid; place-content: center;
-  text-align: center; gap: 0.75rem; padding: 2rem;
+main { max-width: var(--max); width: 100%; margin: 0 auto; padding: 0 1.25rem; flex: 1; }
+
+/* --- Hero --- */
+.hero { text-align: center; padding: 2.5rem 0 1.5rem; }
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem); margin: 0 auto; max-width: 18ch;
+  line-height: 1.1; text-shadow: 2px 2px 0 var(--color-accent-soft);
 }
-.hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin: 0; }
-.hero p { color: #555; max-width: 50ch; }
+.lead { color: var(--color-muted); max-width: 56ch; margin: 1rem auto 0; }
+code {
+  background: var(--color-accent-soft); color: var(--color-accent);
+  padding: 0.05em 0.35em; border-radius: 3px; font-weight: 700;
+}
 
+/* --- Outil --- */
+.tool {
+  background: var(--color-surface);
+  border: 2px solid var(--color-line); border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--color-line);
+  padding: 1.75rem; margin: 1.5rem auto; max-width: 760px;
+}
+.drops { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 540px) { .drops { grid-template-columns: 1fr; } }
+
+.drop {
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  padding: 1.5rem 1rem; text-align: center; cursor: pointer;
+  border: 2px dashed var(--color-line); border-radius: var(--radius);
+  background: var(--color-bg); transition: background 0.12s, transform 0.12s;
+}
+.drop:hover, .drop.dragover { background: var(--color-accent-soft); transform: translate(-1px, -1px); }
+.drop.filled { border-style: solid; }
+.drop-icon { font-size: 1.8rem; line-height: 1; }
+.drop-label { font-weight: 800; }
+.drop-name { font-size: 0.8rem; color: var(--color-muted); word-break: break-all; }
+.drop.filled .drop-name { color: var(--color-accent); font-weight: 700; }
+
+/* --- Boutons --- */
 .btn {
-  display: inline-block; margin-top: 1rem;
-  background: var(--color-accent); color: #fff; text-decoration: none;
-  font-weight: 700; padding: 0.8rem 1.4rem; border-radius: 999px;
+  display: inline-block; margin-top: 1.25rem; cursor: pointer;
+  background: var(--color-accent); color: #fff; border: 2px solid var(--color-line);
+  text-decoration: none; font-weight: 800; font-family: inherit; font-size: 1rem;
+  padding: 0.7rem 1.5rem; border-radius: var(--radius);
+  box-shadow: 3px 3px 0 var(--color-line);
 }
+.btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--color-line); }
+.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--color-line); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.btn-ghost { background: var(--color-surface); color: var(--color-text); margin-top: 0; font-size: 0.85rem; padding: 0.45rem 0.9rem; }
+
+.status { margin-top: 1rem; font-weight: 700; min-height: 1.2em; }
+.status.error { color: #d62828; }
+
+/* --- Résultats --- */
+.results { margin-top: 1.5rem; }
+.results-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem; }
+.results-head span { font-weight: 800; }
+.sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 0.6rem; }
+.sheet figure {
+  margin: 0; background: var(--color-bg); border: 2px solid var(--color-line); border-radius: var(--radius);
+  padding: 0.4rem; text-align: center; cursor: pointer;
+}
+.sheet figure:hover { background: var(--color-accent-soft); }
+.sheet canvas, .sheet img {
+  image-rendering: pixelated; width: 100%; height: auto; display: block;
+  background:
+    repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 50% / 16px 16px; /* damier transparence */
+}
+.sheet figcaption { font-size: 0.7rem; color: var(--color-muted); margin-top: 0.25rem; }
+
+/* --- À propos --- */
+.about { max-width: 60ch; margin: 2.5rem auto 1rem; }
+.about h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.about p { margin-top: 0.75rem; color: var(--color-muted); }
+.about .note {
+  background: #fff7e6; border: 2px solid var(--color-line); border-radius: var(--radius);
+  padding: 0.75rem 1rem; color: var(--color-text); font-weight: 600;
+}
+.about a { color: var(--color-accent); font-weight: 700; }
+
+/* --- Footer --- */
+.foot { text-align: center; padding: 2rem 1rem; color: var(--color-muted); font-size: 0.85rem; }
+
+/* Focus visible (accessibilité) */
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }

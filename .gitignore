@@ -4,3 +4,11 @@ dist/
 .env.local
 *.log
 .DS_Store
+
+# Ressources de jeu — NE JAMAIS committer (copyright). Samples locaux de test :
+samples/
+*.PL8
+*.pl8
+*.256
+*.DAT
+*.dat

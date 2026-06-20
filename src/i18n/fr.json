@@ -1,0 +1,20 @@
+{
+  "meta_description": "Décode tes fichiers .PL8 (+ palette .256) en PNG, directement dans le navigateur. Aucun envoi serveur.",
+  "hero_title": "Décode tes sprites .PL8 en PNG",
+  "hero_subtitle": "Dépose un fichier .PL8 et sa palette .256 : le décodage se fait entièrement dans ton navigateur. Tes fichiers ne quittent jamais ta machine.",
+  "drop_pl8": "Fichier .PL8",
+  "drop_pal": "Palette .256",
+  "drop_none": "aucun fichier",
+  "decode_btn": "Décoder",
+  "decoding": "Décodage en cours…",
+  "results_count": "[n] sprite(s) décodé(s)",
+  "download_all": "Tout télécharger (ZIP)",
+  "about_title": "Comment ça marche",
+  "about_body": "Le format .PL8 est un format de sprites paginés utilisé par certains jeux DOS. Le moteur de décodage (RLE, palettisation, découpe) tourne intégralement côté client en JavaScript : aucun upload, aucun serveur.",
+  "copyright_note": "⚠️ Cet outil ne distribue aucune ressource de jeu. Tu apportes tes propres fichiers, extraits d'une copie que tu possèdes.",
+  "source_link": "Code source sur GitHub",
+  "footer": "Décodage 100% local · open source",
+  "err_need_both": "Charge d'abord un .PL8 et une palette .256.",
+  "err_decode": "Échec du décodage : [msg]",
+  "err_not_ready": "Le moteur de décodage n'est pas encore branché (voir src/decode.js)."
+}

@@ -1,24 +1,37 @@
-# vite-template
+# PL8 Viewer
 
-Repo **template** utilisé par `/bootstrap` pour démarrer un projet **Vite** (vanilla JS + CSS) hébergé sur Hostinger.
+Décode les fichiers de sprites **`.PL8`** (+ palette **`.256`**) de jeux DOS et exporte-les en **PNG**, directement dans ton navigateur.
 
-## Fournit
-- **Vite** vanilla (`pnpm dev` / `build` / `preview`), `base: './'` (chemins relatifs).
-- `.github/workflows/deploy.yml` — déploiement **FTPS branch-aware** : `main` → prod publique, `dev` → staging verrouillé (Basic Auth). Workflow : bosser sur `dev` (preview privée), merge `dev`→`main` + push = prod. Analytics actif sur main seulement.
-- `AGENTS.md` (+ symlink `CLAUDE.md`) — couche projet + working agreement Claude Code.
-- `DESIGN.md` — contrat de design (concept open-design).
-- `.env.example` — modèle des variables d'env analytics ; `deploy.yml` passe les `VITE_*` au build.
-- `src/main.js` (vide) + `src/style.css`.
+🔗 **En ligne : https://pl8.200.work**
 
-> Template **bare** : l'i18n et l'analytics ne sont PAS inclus ici. Ils sont **composés par `/bootstrap`** via les skills dédiés (`i18n`, `tracking`) — source de vérité unique, pas de duplication. Utilisables aussi seuls sur un projet existant :
-> - `~/.claude/skills/i18n/scripts/add-i18n.sh <dir> <langs>`
-> - `~/.claude/skills/tracking/scripts/add-tracking.sh <dir> --provider=umami --repo=… --name=… --domain=…`
+- 🖥️ **100 % local** — tes fichiers ne quittent jamais ta machine, aucun serveur, aucun upload.
+- 🎨 Aperçu en planche-contact, export PNG à l'unité ou en ZIP.
+- 🌍 Interface FR / EN.
 
-## Ce que `/bootstrap` configure par projet
-- Crée le sous-domaine Hostinger + variable `DEPLOY_DIR` = `/domains/<domaine>/public_html/<sous-domaine>/`.
-- Pose les secrets `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`.
-- Pré-remplit `AGENTS.md` et `DESIGN.md` via un assistant Q&A.
-- Configure les **langues** (ajoute/retire des `src/i18n/<code>.json`) ; une seule langue → sélecteur masqué.
+## Comment ça marche
 
-## Usage manuel
-`gh repo create mon-app --template korvus/vite-template --private --clone`
+Le format `.PL8` est un format de sprites paginés utilisé par certains jeux DOS. Tout le décodage (RLE, palettisation, découpe) tourne côté client en JavaScript pur. Tu déposes :
+
+1. un fichier **`.PL8`** (les sprites) ;
+2. sa palette **`.256`** (les couleurs).
+
+…et tu récupères les sprites en PNG.
+
+## ⚠️ Ressources de jeu
+
+Cet outil **ne distribue aucune ressource de jeu**. Tu apportes tes propres fichiers, extraits d'une copie que tu possèdes légalement. Aucun sprite ni palette d'un jeu n'est inclus dans ce dépôt.
+
+## Développement
+
+```bash
+pnpm install
+pnpm dev        # serveur de dev avec hot reload
+pnpm build      # build de production → dist/
+pnpm preview    # prévisualise le build
+```
+
+Le moteur de décodage est isolé dans [`src/decode.js`](src/decode.js) — c'est le seul point à brancher pour faire évoluer le format pris en charge.
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE).

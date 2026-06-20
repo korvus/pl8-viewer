@@ -1,0 +1,20 @@
+{
+  "meta_description": "Decode your .PL8 files (+ .256 palette) to PNG, right in your browser. Nothing is uploaded.",
+  "hero_title": "Decode your .PL8 sprites to PNG",
+  "hero_subtitle": "Drop a .PL8 file and its .256 palette: decoding runs entirely in your browser. Your files never leave your machine.",
+  "drop_pl8": ".PL8 file",
+  "drop_pal": ".256 palette",
+  "drop_none": "no file",
+  "decode_btn": "Decode",
+  "decoding": "Decoding…",
+  "results_count": "[n] sprite(s) decoded",
+  "download_all": "Download all (ZIP)",
+  "about_title": "How it works",
+  "about_body": "The .PL8 format is a paged sprite format used by some DOS games. The decoding engine (RLE, palette mapping, trimming) runs entirely client-side in JavaScript: no upload, no server.",
+  "copyright_note": "⚠️ This tool ships no game assets. You bring your own files, extracted from a copy you own.",
+  "source_link": "Source code on GitHub",
+  "footer": "100% local decoding · open source",
+  "err_need_both": "Load a .PL8 file and a .256 palette first.",
+  "err_decode": "Decoding failed: [msg]",
+  "err_not_ready": "The decoding engine isn't wired in yet (see src/decode.js)."
+}

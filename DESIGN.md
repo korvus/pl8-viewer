@@ -1,38 +1,46 @@
-# DESIGN.md — contrat de design de <NOM_DU_PROJET>
+# DESIGN.md — contrat de design de PL8 Viewer
 
-> Inspiré du concept `DESIGN.md` d'open-design : ce fichier est le **contrat de marque**. Tout rendu visuel (par toi ou par un agent) doit le respecter. Pré-rempli par `/bootstrap`, à affiner ensuite. Les valeurs vivent aussi en variables CSS dans `src/style.css`.
+> Inspiré du concept `DESIGN.md` d'open-design : ce fichier est le **contrat de marque**. Tout rendu visuel (par toi ou par un agent) doit le respecter. Les valeurs vivent aussi en variables CSS dans `src/style.css`.
 
 ## Intention
-- **Pitch** : <CE_QUE_FAIT_LE_SITE>
-- **Public** : <CIBLE>
-- **Ton** : <ex. sobre / ludique / pro / chaleureux>
-- **Ambiance visuelle** : <ex. minimaliste, contrasté, doux, brutaliste>
+- **Pitch** : un outil web qui décode les fichiers de sprites `.PL8` (+ palette `.256`) de jeux DOS et les exporte en PNG, entièrement dans le navigateur (aucun upload).
+- **Public** : moddeurs, archivistes du rétro-gaming, développeurs de portages, curieux du reverse-engineering.
+- **Ton** : direct, technique mais accessible, un brin ludique (clin d'œil rétro).
+- **Ambiance visuelle** : pixel-art clair — fond clair, accent indigo, blocs aux angles nets avec ombre décalée façon 8-bit, damier de transparence sur les sprites.
 
 ## Palette
 | Rôle | Variable CSS | Valeur |
 |---|---|---|
-| Fond | `--color-bg` | `#ffffff` |
-| Texte | `--color-text` | `#1a1a1a` |
+| Fond | `--color-bg` | `#f4f4fb` |
+| Surface | `--color-surface` | `#ffffff` |
+| Texte | `--color-text` | `#1a1a2e` |
+| Texte atténué | `--color-muted` | `#6b6b80` |
 | Accent | `--color-accent` | `#4f46e5` |
+| Accent doux | `--color-accent-soft` | `#ece9fe` |
+| Trait/contour | `--color-line` | `#1a1a2e` |
 
 ## Typographie
-- Police : `--font-base` = `system-ui, sans-serif` (<remplacer si police custom>)
-- Échelle titres : `clamp()` fluide
-- Hauteur de ligne corps : 1.5
+- Police : `--font-base` = `system-ui, sans-serif` (lisible, neutre ; le caractère rétro vient des formes, pas d'une police pixel).
+- Échelle titres : `clamp()` fluide, léger `text-shadow` accent-soft sur le H1.
+- Hauteur de ligne corps : 1.55
 
 ## Layout & espacements
 - Unité de base : 8px (0.5rem)
-- Largeur de contenu max : <ex. 1100px>
-- Style : <ex. aéré, dense, centré>
+- Largeur de contenu max : 1000px ; bloc outil max 760px, centré.
+- Style : aéré, centré, une colonne. L'outil est le héros (au-dessus de la ligne de flottaison).
 
 ## Composants (conventions)
-- Boutons : <forme, rayon, états hover/focus>
-- Cartes : <ombre, bordure, rayon>
-- États focus visibles (accessibilité) : obligatoire
+- **Blocs "pixel"** : bordure 2px `--color-line` + `box-shadow` décalée (`4–6px 4–6px 0`), angles nets (`--radius: 4px`).
+- **Boutons** : pleins accent, contour net, ombre décalée ; hover = léger décalage ; active = "enfoncé".
+- **Zones de dépôt** : bordure pointillée, fond accent-soft au survol/drag, passent en trait plein une fois remplies.
+- **Sprites** : `image-rendering: pixelated` + damier de transparence en fond.
+- États focus visibles (accessibilité) : obligatoire (`:focus-visible` accent).
 
 ## Voix / copy
-- Langue : français
-- Style d'écriture : <ex. direct, tutoiement, concis>
+- Langues : français (défaut) + anglais.
+- Style d'écriture : direct, tutoiement, concis. Vocabulaire technique assumé (.PL8, RLE, palette).
 
 ## À éviter
-- <anti-patterns visuels : ex. trop de couleurs, animations agressives>
+- Thème sombre "hacker", néons, animations agressives.
+- Lisser/anti-aliaser les sprites (toujours `pixelated`).
+- Toute ressource de jeu embarquée (sprites, palette Sierra) — voir AGENTS.md.

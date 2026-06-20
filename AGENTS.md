@@ -1,14 +1,14 @@
-# <NOM_DU_PROJET>
+# PL8 Viewer
 
 > Couche projet (voir le `AGENTS.md` racine du homelab pour le contexte serveur global). Lu par Claude Code via le symlink `CLAUDE.md`. Voir `DESIGN.md` pour le contrat de design.
 
 ## Résumé
-<UNE_PHRASE_DECRIVANT_LE_PROJET>
+Outil web statique qui décode les fichiers de sprites `.PL8` (+ palette `.256`) de jeux DOS et les exporte en PNG, 100 % côté navigateur (aucun upload serveur). Le moteur de décodage est réutilisé depuis le portage OpenLotR2 (`pl8-draw.js` / `pl8image`).
 
 ## Stack
 - **Vite** (vanilla JS, sans framework)
 - **CSS classique** (variables CSS dans `src/style.css`)
-- Hébergement : Hostinger, sous-domaine `<SOUS_DOMAINE>.<DOMAINE>`
+- Hébergement : Hostinger, sous-domaine `pl8.200.work`
 
 ## Commandes
 | But | Commande |
@@ -20,8 +20,10 @@
 | Déployer | `git push` sur `main` (CI FTPS automatique) |
 
 ## Structure
-- `index.html` — point d'entrée (texte via attributs `data-i18n`)
-- `src/main.js` — logique (initialise l'i18n)
+- `index.html` — landing + UI de l'outil (texte via attributs `data-i18n`)
+- `src/main.js` — câblage UI : sélection/drag-drop des fichiers, appel du décodeur, rendu canvas, export PNG/ZIP
+- `src/decode.js` — **POINT D'INTÉGRATION du décodeur** (stub à porter, voir « Notes spécifiques »)
+- `src/zip.js` — mini-écrivain ZIP sans dépendance (méthode store) pour « tout télécharger »
 - `src/style.css` — styles (suit `DESIGN.md`)
 - `src/i18n/` — traductions : `languages.js` (langues actives), `<code>.json` (dictionnaires), `i18n.js` (moteur)
 - `src/analytics.js` — injection analytics provider-agnostic (umami/posthog/ga)
@@ -54,4 +56,16 @@
 - Secrets requis (posés par `/bootstrap`) : `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`.
 
 ## Notes spécifiques
-<SPECIFICITES>
+
+### Brancher le décodeur (tâche principale restante)
+Toute l'UI est prête et appelle `decodePl8(pl8Bytes, paletteBytes)` dans `src/decode.js`, qui est pour l'instant un **stub** (`DECODER_READY = false`, jette `DECODER_NOT_WIRED` → l'UI affiche un message clair). Pour rendre l'outil fonctionnel, porter le moteur depuis le repo du jeu **OpenLotR2** (dossier `tools/`) :
+- copier `lib/pl8-draw.js` + le parseur `pl8image` (`Pl8.parse`) dans `src/pl8/` ;
+- `pnpm add buffer` puis `import { Buffer } from 'buffer'` (polyfill navigateur du `Buffer` Node) ;
+- remplacer les `fs.readFileSync(...)` par les `Uint8Array` reçus en argument ; la palette `.256` remplace `readPalette('LORDS2.256')` ;
+- **supprimer `pngjs`** (dépend de zlib/stream Node) : renvoyer le RGBA brut, l'UI fait `canvas.toBlob()` ;
+- respecter le contrat de retour documenté en tête de `src/decode.js` (`{name,width,height,rgba}[]`), puis passer `DECODER_READY = true`.
+
+Ce travail se fait côté **Windows** (là où vit OpenLotR2), puis `git push` → déploiement auto. Réfs format : `OpenLotR2/tools/.pl8.rst`, `inspect-pl8.js`, `extract-*.js`.
+
+### ⚠️ Copyright — règle non négociable
+Ce repo est **public** et ne doit contenir **AUCUNE ressource de jeu** : pas de `.PL8`, pas de palette `.256`/Sierra, pas de sprite extrait, pas de fichier de `FR/C/LORDS2/`. L'outil fonctionne parce que **l'utilisateur apporte ses propres fichiers** (décodage 100 % local, rien n'est uploadé). Ne jamais committer d'asset de test issu du jeu — utiliser un `.gitignore` strict pour les dossiers de samples locaux.
