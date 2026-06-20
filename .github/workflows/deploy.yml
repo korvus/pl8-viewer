@@ -50,8 +50,10 @@ jobs:
             echo "DEPLOY_TARGET=${{ vars.DEPLOY_DIR_DEV }}" >> "$GITHUB_ENV"
             AUTHFILE="/home/u372623295${{ vars.DEPLOY_DIR_DEV }}.htpasswd"
             printf '%s:%s\n' "${{ secrets.DEV_USER }}" "$(openssl passwd -apr1 '${{ secrets.DEV_PASS }}')" > dist/.htpasswd
-            printf 'AuthType Basic\nAuthName "Staging - acces restreint"\nAuthUserFile "%s"\nRequire valid-user\n' "$AUTHFILE" > dist/.htaccess
-            echo "→ dev : verrou Basic Auth ajouté"
+            # Append (>>) : conserve les règles de routage des langues issues de
+            # public/.htaccess, en y ajoutant le verrou Basic Auth.
+            printf 'AuthType Basic\nAuthName "Staging - acces restreint"\nAuthUserFile "%s"\nRequire valid-user\n' "$AUTHFILE" >> dist/.htaccess
+            echo "→ dev : verrou Basic Auth ajouté (routage langues conservé)"
           else
             echo "DEPLOY_TARGET=${{ vars.DEPLOY_DIR }}" >> "$GITHUB_ENV"
             echo "→ prod : public"

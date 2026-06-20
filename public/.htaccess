@@ -1,0 +1,14 @@
+# Routage des langues côté serveur (Apache / Hostinger).
+# L'app est une page unique : /fr et /en doivent servir index.html, où le
+# moteur i18n lit le segment d'URL pour choisir la langue. La racine "/" est
+# redirigée vers /fr ou /en par le JS (selon la langue du navigateur).
+RewriteEngine On
+RewriteBase /
+
+# Laisser passer les fichiers et dossiers réels (assets, bg.png, favicons…).
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Routes de langue -> application.
+RewriteRule ^(fr|en)/?$ index.html [L]

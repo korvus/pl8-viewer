@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PL8 Viewer — décodeur de sprites .PL8 en ligne</title>
     <meta name="description" data-i18n-attr="content:meta_description" content="Décode tes fichiers .PL8 (+ palette .256) en PNG, directement dans le navigateur. Aucun envoi serveur." />
+
+    <!-- Open Graph (Facebook, LinkedIn, Discord, Slack…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PL8 Viewer" />
+    <meta property="og:url" content="https://pl8.200.work/" />
+    <meta property="og:title" content="PL8 Viewer — décodeur de sprites .PL8 en ligne" />
+    <meta property="og:description" content="Décode tes fichiers .PL8 (+ palette .256) en PNG, directement dans le navigateur. Aucun envoi serveur." />
+    <meta property="og:image" content="https://pl8.200.work/preview-pl8-viewer.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="PL8 Viewer : convertis tes sprites .PL8 en PNG en un clic." />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PL8 Viewer — décodeur de sprites .PL8 en ligne" />
+    <meta name="twitter:description" content="Décode tes fichiers .PL8 (+ palette .256) en PNG, directement dans le navigateur. Aucun envoi serveur." />
+    <meta name="twitter:image" content="https://pl8.200.work/preview-pl8-viewer.png" />
+
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -55,9 +76,20 @@
 
       <!-- ===== À propos ===== -->
       <section class="about">
-        <h2 data-i18n="about_title">Comment ça marche</h2>
-        <p data-i18n="about_body">Le format .PL8 est un format de sprites paginés utilisé par certains jeux DOS. Le moteur de décodage (RLE, palettisation, découpe) tourne intégralement côté client en JavaScript : aucun upload, aucun serveur.</p>
+        <h2 data-i18n="about_title">Le format .PL8</h2>
+        <p data-i18n="about_intro">Le .PL8 est un conteneur de sprites paginés utilisé par des jeux DOS du milieu des années 1990, notamment ceux développés par Impressions Games et édités par Sierra. Un même fichier regroupe plusieurs images — unités, bâtiments, éléments d'interface — chacune décrite par un en-tête (dimensions, position des données pixel).</p>
+        <p data-i18n="about_palette">Les couleurs ne sont pas stockées dans le .PL8 : chaque pixel est un index vers une palette externe, le fichier .256 (256 teintes en VGA 6 bits). L'index 0 sert de transparence — c'est pourquoi l'outil a besoin des deux fichiers.</p>
+
+        <h3 data-i18n="about_encodings_title">Trois encodages</h3>
+        <ul>
+          <li data-i18n="enc_bitmap">Bitmap simple — un octet par pixel, lu directement comme index de palette.</li>
+          <li data-i18n="enc_rle">RLE — compression par séries : un compteur de pixels opaques, ou des sauts de pixels transparents.</li>
+          <li data-i18n="enc_iso">Isométrique — rangées centrées en losange (largeur variable selon la hauteur), avec d'éventuelles « rangées supplémentaires » pour les hauts de bâtiments.</li>
+        </ul>
+
+        <p data-i18n="about_local">Le décodage (palettisation, RLE, géométrie isométrique, recadrage) tourne intégralement dans ton navigateur : aucun upload, aucun serveur.</p>
         <p class="note" data-i18n="copyright_note">⚠️ Cet outil ne distribue aucune ressource de jeu. Tu apportes tes propres fichiers, extraits d'une copie que tu possèdes.</p>
+        <p data-i18n="about_spec">Spécification complète du format : [a href='https://pl8image.readthedocs.io/en/latest/.pl8.html']documentation pl8image[/a].</p>
         <p><a id="repo-link" href="https://github.com/korvus/pl8-viewer" data-i18n="source_link">Code source sur GitHub</a></p>
       </section>
     </main>

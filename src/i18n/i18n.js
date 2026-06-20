@@ -8,7 +8,16 @@ import { dictionaries, languageOptions, defaultLanguage } from './languages.js'
 
 const STORAGE_KEY = 'lang'
 
+// La langue vit dans l'URL : /fr, /en. Le premier segment du chemin fait foi
+// (lien partagé), sinon préférence sauvegardée, sinon langue du navigateur.
+function localeFromPath() {
+  const seg = window.location.pathname.split('/')[1]
+  return dictionaries[seg] ? seg : null
+}
+
 function detect() {
+  const fromPath = localeFromPath()
+  if (fromPath) return fromPath
   const saved = localStorage.getItem(STORAGE_KEY)
   if (saved && dictionaries[saved]) return saved
   const nav = (navigator.language || defaultLanguage).slice(0, 2)
@@ -50,6 +59,11 @@ export function setLanguage(lang) {
   if (!dictionaries[lang]) return
   current = lang
   localStorage.setItem(STORAGE_KEY, lang)
+  // Reflète la langue dans l'URL (/fr <-> /en) sans recharger la page.
+  const target = '/' + lang + window.location.search + window.location.hash
+  if (window.location.pathname !== '/' + lang) {
+    window.history.pushState({}, '', target)
+  }
   applyTranslations()
   renderSelector()
 }
@@ -66,6 +80,25 @@ export function renderSelector(containerId = 'langs') {
 }
 
 export function initI18n() {
+  // Pas de langue dans l'URL (racine "/", "/index.html", chemin inconnu) :
+  // redirige vers /<langue détectée>. replace() = pas d'entrée d'historique.
+  if (!localeFromPath()) {
+    window.location.replace('/' + current + window.location.search + window.location.hash)
+    return
+  }
+  // Aligne la préférence sauvegardée sur la langue de l'URL.
+  localStorage.setItem(STORAGE_KEY, current)
   applyTranslations()
   renderSelector()
+
+  // Boutons précédent/suivant du navigateur : resynchronise la langue.
+  window.addEventListener('popstate', () => {
+    const loc = localeFromPath()
+    if (loc && loc !== current) {
+      current = loc
+      localStorage.setItem(STORAGE_KEY, loc)
+      applyTranslations()
+      renderSelector()
+    }
+  })
 }
