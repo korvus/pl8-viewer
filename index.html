@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nouveau projet</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <span class="logo">PROJET</span>
+      <!-- Sélecteur de langue rempli par i18n (masqué si une seule langue) -->
+      <div class="langs" id="langs"></div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1 data-i18n="hero_title">It works 🎉</h1>
+        <p data-i18n="hero_subtitle">Edit src/i18n/*.json and tag elements with data-i18n.</p>
+        <a class="btn" href="#" data-i18n="hero_cta">Get started</a>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

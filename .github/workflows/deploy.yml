@@ -1,0 +1,89 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+
+# Un seul déploiement à la fois PAR BRANCHE (main=prod, dev=staging ne se télescopent pas).
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # ubuntu-latest par défaut. Pour fiabiliser (blocages IP Hostinger), enregistrer un runner
+    # self-hosted sur le NUC et passer à `runs-on: self-hosted`.
+    runs-on: ubuntu-latest
+    # Le repo template lui-même ne déploie pas.
+    if: github.repository != 'korvus/vite-template'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install & build
+        env:
+          # Analytics actif sur main (prod) seulement → le staging ne pollue pas les stats.
+          VITE_ANALYTICS: ${{ github.ref_name == 'main' && vars.VITE_ANALYTICS || '' }}
+          VITE_UMAMI_SRC: ${{ vars.VITE_UMAMI_SRC }}
+          VITE_UMAMI_ID: ${{ vars.VITE_UMAMI_ID }}
+          VITE_GA_ID: ${{ vars.VITE_GA_ID }}
+          VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ vars.VITE_POSTHOG_HOST }}
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
+
+      # Cible selon la branche : main → prod (public) ; dev → staging (Basic Auth)
+      - name: Cible + verrou dev
+        run: |
+          if [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "DEPLOY_TARGET=${{ vars.DEPLOY_DIR_DEV }}" >> "$GITHUB_ENV"
+            AUTHFILE="/home/u372623295${{ vars.DEPLOY_DIR_DEV }}.htpasswd"
+            printf '%s:%s\n' "${{ secrets.DEV_USER }}" "$(openssl passwd -apr1 '${{ secrets.DEV_PASS }}')" > dist/.htpasswd
+            printf 'AuthType Basic\nAuthName "Staging - acces restreint"\nAuthUserFile "%s"\nRequire valid-user\n' "$AUTHFILE" > dist/.htaccess
+            echo "→ dev : verrou Basic Auth ajouté"
+          else
+            echo "DEPLOY_TARGET=${{ vars.DEPLOY_DIR }}" >> "$GITHUB_ENV"
+            echo "→ prod : public"
+          fi
+
+      - name: Deploy via FTPS (tentative 1)
+        id: deploy1
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server:   ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          security: loose
+          local-dir: ./dist/
+          server-dir: ${{ env.DEPLOY_TARGET }}
+
+      - name: Pause avant retry
+        if: steps.deploy1.outcome == 'failure'
+        run: sleep 30
+
+      - name: Deploy via FTPS (retry)
+        if: steps.deploy1.outcome == 'failure'
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server:   ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          security: loose
+          local-dir: ./dist/
+          server-dir: ${{ env.DEPLOY_TARGET }}
