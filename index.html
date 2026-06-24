@@ -90,12 +90,44 @@
         <p data-i18n="about_local">Le décodage (palettisation, RLE, géométrie isométrique, recadrage) tourne intégralement dans ton navigateur : aucun upload, aucun serveur.</p>
         <p class="note" data-i18n="copyright_note">⚠️ Cet outil ne distribue aucune ressource de jeu. Tu apportes tes propres fichiers, extraits d'une copie que tu possèdes.</p>
         <p data-i18n="about_spec">Spécification complète du format : [a href='https://pl8image.readthedocs.io/en/latest/.pl8.html']documentation pl8image[/a].</p>
-        <p><a id="repo-link" href="https://github.com/korvus/pl8-viewer" data-i18n="source_link">Code source sur GitHub</a></p>
+        <p><a id="repo-link" href="https://github.com/korvus/pl8-viewer" target="_blank" rel="noopener" data-umami-event="source-github" data-i18n="source_link">Code source sur GitHub</a></p>
       </section>
     </main>
 
     <footer class="foot">
       <span data-i18n="footer">Décodage 100% local · open source</span>
+      <section class="games" aria-labelledby="games-title">
+        <p class="games-intro" id="games-title" data-i18n="footer_games_intro">À voir aussi, mes jeux :</p>
+        <div class="games-grid">
+          <a class="game" href="https://eskargool.200.work" target="_blank" rel="noopener" data-umami-event="game-eskargool" data-game-langs="fr en">
+            <img src="/games/eskargool.png" alt="Eskargool" width="200" height="120" loading="lazy" />
+            <span class="game-name">Eskargool</span>
+            <span class="game-badge" data-i18n-attr="title:game_en_only" title="Disponible en anglais uniquement">EN</span>
+          </a>
+          <a class="game" href="https://terrean.200.work" target="_blank" rel="noopener" data-umami-event="game-terrean" data-game-langs="fr en">
+            <img src="/games/terrean.png" alt="Terrean" width="200" height="120" loading="lazy" />
+            <span class="game-name">Terrean</span>
+            <span class="game-badge" data-i18n-attr="title:game_en_only" title="Disponible en anglais uniquement">EN</span>
+          </a>
+          <a class="game" href="https://kyiv.200.work" target="_blank" rel="noopener" data-umami-event="game-kyiv" data-game-langs="fr en">
+            <img src="/games/kyiv.png" alt="Kyiv" width="200" height="120" loading="lazy" />
+            <span class="game-name">Kyiv</span>
+            <span class="game-badge" data-i18n-attr="title:game_en_only" title="Disponible en anglais uniquement">EN</span>
+          </a>
+          <a class="game" href="https://seudides.200.work" target="_blank" rel="noopener" data-umami-event="game-seudides" data-game-langs="en">
+            <img src="/games/seudides.png" alt="Seudides" width="200" height="120" loading="lazy" />
+            <span class="game-name">Seudides</span>
+            <span class="game-badge" data-i18n-attr="title:game_en_only" title="Disponible en anglais uniquement">EN</span>
+          </a>
+          <a class="game" href="http://doomsweeper.200.work" target="_blank" rel="noopener" data-umami-event="game-doomsweeper" data-game-langs="en">
+            <img src="/games/doomsweeper.png" alt="Doomsweeper" width="200" height="120" loading="lazy" />
+            <span class="game-name">Doomsweeper</span>
+            <span class="game-badge" data-i18n-attr="title:game_en_only" title="Disponible en anglais uniquement">EN</span>
+          </a>
+        </div>
+      </section>
+
+      <a class="foot-bmc" href="https://www.buymeacoffee.com/ertelsimonu" target="_blank" rel="noopener" data-umami-event="donate-bmc" data-i18n="footer_bmc">☕ Offrez-moi un café</a>
     </footer>
 
     <script type="module" src="/src/main.js"></script>

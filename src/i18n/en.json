@@ -21,6 +21,9 @@
   "about_spec": "Full format specification: [a href='https://pl8image.readthedocs.io/en/latest/.pl8.html']pl8image documentation[/a].",
   "source_link": "Source code on GitHub",
   "footer": "100% local decoding · open source",
+  "footer_games_intro": "Also, check out my games:",
+  "footer_bmc": "☕ Buy me a coffee",
+  "game_en_only": "English only",
   "err_need_both": "Load a .PL8 file and a .256 palette first.",
   "err_decode": "Decoding failed: [msg]",
   "err_not_ready": "The decoding engine isn't wired in yet (see src/decode.js)."

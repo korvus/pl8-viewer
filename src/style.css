@@ -146,9 +146,39 @@ code {
 }
 .about a { color: var(--color-accent); font-weight: 700; }
 
-/* --- Footer --- */
-.foot { text-align: center; padding: 2rem 1rem; color: var(--color-muted); font-size: 0.85rem; }
-.foot span { background: var(--readable-bg); padding: 0.3rem 0.7rem; border-radius: var(--radius); }
+/* Footer pleine largeur sur fond noir (enfant direct de <body>, hors du <main> 1000px).
+   Palette inversée : texte clair + bordures/ombres "pixel" claires pour rester lisibles. */
+.foot { background: #0d0d14; color: #c4c4d4; text-align: center; padding: 2.75rem 1rem 3.25rem;
+  font-size: 0.85rem; --foot-line: #f4f4fb; }
+
+/* --- Vitrine de jeux (liens externes, images réutilisées de 200.work) --- */
+.games { margin: 1.75rem auto 0; max-width: var(--max); }
+.games-intro { margin: 0 0 1rem; font-weight: 700; color: #ffffff; }
+.games-grid { display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; margin: 0 auto; }
+/* Sous le seuil où les 5 ne tiennent plus sur une ligne : 3 par ligne (3+2) plutôt qu'un vilain 4+1 */
+@media (max-width: 991px) { .games-grid { max-width: 580px; } }
+@media (max-width: 420px) { .games-grid { max-width: 380px; } }
+.game { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
+  text-decoration: none; color: #f4f4fb; font-weight: 600; }
+.game img { width: 176px; height: 106px; object-fit: cover; display: block; background: var(--color-surface);
+  border: 2px solid var(--foot-line); border-radius: var(--radius); box-shadow: 4px 4px 0 var(--foot-line);
+  transition: transform .08s, box-shadow .08s; }
+.game:hover img, .game:focus-visible img { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--foot-line); }
+.game-name { font-size: 0.9rem; }
+.game-badge { display: none; position: absolute; top: 6px; right: 6px;
+  background: var(--color-accent); color: #fff; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px;
+  padding: 1px 6px; border: 2px solid var(--foot-line); border-radius: var(--radius); line-height: 1.4; }
+/* Badge affiché si le jeu n'existe pas dans la langue courante (cf. data-game-langs) */
+html[lang="fr"] .game:not([data-game-langs~="fr"]) .game-badge { display: inline-block; }
+html[lang="en"] .game:not([data-game-langs~="en"]) .game-badge { display: inline-block; }
+
+/* --- Bouton don, accordé à la charte (bloc pixel accent) --- */
+.foot-bmc { display: inline-block; margin-top: 1.75rem; padding: 0.6rem 1.1rem;
+  background: var(--color-accent); color: #fff; text-decoration: none; font-weight: 700;
+  border: 2px solid var(--foot-line); border-radius: var(--radius); box-shadow: 4px 4px 0 var(--foot-line);
+  transition: transform .08s, box-shadow .08s; }
+.foot-bmc:hover, .foot-bmc:focus-visible { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--foot-line); }
+.foot-bmc:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--foot-line); }
 
 /* Focus visible (accessibilité) */
 :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }

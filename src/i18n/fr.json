@@ -21,6 +21,9 @@
   "about_spec": "Spécification complète du format : [a href='https://pl8image.readthedocs.io/en/latest/.pl8.html']documentation pl8image[/a].",
   "source_link": "Code source sur GitHub",
   "footer": "Décodage 100% local · open source",
+  "footer_games_intro": "À voir aussi, mes jeux :",
+  "footer_bmc": "☕ Offrez-moi un café",
+  "game_en_only": "Disponible en anglais uniquement",
   "err_need_both": "Charge d'abord un .PL8 et une palette .256.",
   "err_decode": "Échec du décodage : [msg]",
   "err_not_ready": "Le moteur de décodage n'est pas encore branché (voir src/decode.js)."

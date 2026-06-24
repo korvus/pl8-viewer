@@ -6,7 +6,7 @@
 - **Pitch** : un outil web qui décode les fichiers de sprites `.PL8` (+ palette `.256`) de jeux DOS et les exporte en PNG, entièrement dans le navigateur (aucun upload).
 - **Public** : moddeurs, archivistes du rétro-gaming, développeurs de portages, curieux du reverse-engineering.
 - **Ton** : direct, technique mais accessible, un brin ludique (clin d'œil rétro).
-- **Ambiance visuelle** : pixel-art clair — fond clair, accent indigo, blocs aux angles nets avec ombre décalée façon 8-bit, damier de transparence sur les sprites.
+- **Ambiance visuelle** : pixel-art clair — fond clair **texturé** (`public/bg.png`, tuile 190px), accent indigo, blocs aux angles nets avec ombre décalée façon 8-bit, damier de transparence sur les sprites. Le **footer** rompt le motif : bande noire pleine largeur (`#0d0d14`, palette inversée, ombres « pixel » claires via `--foot-line`) hébergeant la vitrine de jeux + le bouton de don.
 
 ## Palette
 | Rôle | Variable CSS | Valeur |
