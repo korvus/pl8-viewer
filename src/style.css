@@ -129,10 +129,10 @@ code {
     repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 50% / 16px 16px; /* damier transparence */
 }
 .sheet figcaption { font-size: 0.7rem; color: var(--color-muted); margin-top: 0.25rem; }
-/* Une seule image décodée → on profite de la place : preview agrandie et centrée.
-   La planche passe en flex centré ; le canvas (width:100%) remplit la figure élargie. */
-.sheet:has(figure:only-child) { display: flex; justify-content: center; }
-.sheet:has(figure:only-child) figure { width: 100%; max-width: 400px; }
+/* Une seule image décodée → on profite de toute la largeur du bloc : la planche
+   passe en bloc et la figure (canvas width:100%) occupe la largeur disponible. */
+.sheet:has(figure:only-child) { display: block; }
+.sheet:has(figure:only-child) figure { width: 100%; }
 .sheet:has(figure:only-child) figcaption { font-size: 0.85rem; }
 
 /* --- À propos --- */
