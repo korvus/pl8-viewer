@@ -1,5 +1,7 @@
 {
+  "meta_title": "PL8 Viewer — décodeur de sprites .PL8 en ligne",
   "meta_description": "Décode tes fichiers .PL8 (+ palette .256) en PNG, directement dans le navigateur. Aucun envoi serveur.",
+  "og_image_alt": "PL8 Viewer : convertis tes sprites .PL8 en PNG en un clic.",
   "hero_title": "Décode tes sprites .PL8 en PNG",
   "hero_subtitle": "Dépose un fichier .PL8 et sa palette .256 : le décodage se fait entièrement dans ton navigateur. Tes fichiers ne quittent jamais ta machine.",
   "drop_pl8": "Fichier .PL8",

@@ -1,6 +1,8 @@
 # Routage des langues côté serveur (Apache / Hostinger).
-# L'app est une page unique : /fr et /en doivent servir index.html, où le
-# moteur i18n lit le segment d'URL pour choisir la langue. La racine "/" est
+# L'app est une page unique, mais chaque langue a son propre HTML avec un <head>
+# traduit (OG/title/lang, généré au build par scripts/og-i18n.mjs) → les crawlers
+# (Discord, Facebook…) voient la bonne langue selon l'URL partagée. Le corps est
+# identique : le moteur i18n lit le segment d'URL côté JS. La racine "/" est
 # redirigée vers /fr ou /en par le JS (selon la langue du navigateur).
 RewriteEngine On
 RewriteBase /
@@ -10,5 +12,6 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Routes de langue -> application.
-RewriteRule ^(fr|en)/?$ index.html [L]
+# Chaque langue -> son HTML dédié (head traduit), corps commun.
+RewriteRule ^fr/?$ fr.html [L]
+RewriteRule ^en/?$ en.html [L]

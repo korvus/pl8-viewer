@@ -6,7 +6,7 @@
   "packageManager": "pnpm@11.8.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/og-i18n.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {
