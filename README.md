@@ -32,6 +32,12 @@ pnpm preview    # prévisualise le build
 
 Le moteur de décodage est isolé dans [`src/decode.js`](src/decode.js) — c'est le seul point à brancher pour faire évoluer le format pris en charge.
 
+Pour les planches originales `TOWN1A-D.PL8` et `CASTLE1A-D.PL8`, le viewer
+applique automatiquement les géométries d'« extra rows » validées contre le
+rendu DOS. Cela restitue notamment les tours des châteaux, la roue de la mine
+de fer, les villages et les pales du moulin de la grande ville sans leur
+déformation diagonale. Les autres planches conservent le décodage générique.
+
 ## Licence
 
 MIT — voir [LICENSE](LICENSE).

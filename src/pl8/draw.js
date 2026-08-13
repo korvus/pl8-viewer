@@ -18,7 +18,7 @@ function isoTileSize(t) {
 }
 
 // Losange iso (+ extra rows) dessiné à l'origine via put(x, y, indexPalette).
-function drawIso(tile, data, put) {
+function drawIso(tile, data, put, options = {}) {
   const h = tile.height
   const half = h / 2
   let s = 0
@@ -35,13 +35,31 @@ function drawIso(tile, data, put) {
 
   if (tile.extraType === 2 || tile.extraType === 3 || tile.extraType === 4) {
     const rowW = tile.extraType === 2 ? tile.width : tile.width / 2 + 1
-    const offX = tile.extraType === 4 ? tile.width - rowW : 0
-    for (let e = 0; e < tile.extraRows; e++) {
-      for (let w = 0; w < rowW; w++) {
-        const v = data[s++]
-        if (v) put(offX + w, half - tile.extraRows + e, v)
+    const baseOffX = tile.extraType === 4 ? tile.width - rowW : 0
+    const offX = baseOffX + (options.extraOffsetX || 0)
+    if (options.edgeExtras) {
+      const halfW = tile.width / 2
+      for (let e = 0; e < tile.extraRows; e++) {
+        for (let w = 0; w < rowW; w++) {
+          const v = data[s + e * rowW + w]
+          if (!v) continue
+          const ax = baseOffX + w
+          const r = ax < halfW
+            ? ((halfW - ax) >> 1)
+            : ((ax - halfW + 1) >> 1)
+          put(ax + (options.extraOffsetX || 0), r - 1 - e, v)
+        }
+      }
+    } else {
+      for (let e = 0; e < tile.extraRows; e++) {
+        const sourceRow = options.reverseExtraRows ? tile.extraRows - 1 - e : e
+        for (let w = 0; w < rowW; w++) {
+          const v = data[s + sourceRow * rowW + w]
+          if (v) put(offX + w, half - tile.extraRows + e + (options.extraOffsetY || 0), v)
+        }
       }
     }
+    s += tile.extraRows * rowW
   }
 }
 
@@ -88,7 +106,7 @@ function drawRle(tile, data, put) {
 // cadre sur leur boîte englobante : la grille s'étend pour tout contenir et le
 // sprite est rogné au plus juste. Les tuiles brutes/RLE gardent leurs
 // dimensions width×height (cadre prévisible, jamais de débordement).
-export function decodeTile(tile, bytes, palette, rleFile, avail) {
+export function decodeTile(tile, bytes, palette, rleFile, avail, options = {}) {
   if (!tile.width || !tile.height) return null
 
   const pixels = []
@@ -97,7 +115,7 @@ export function decodeTile(tile, bytes, palette, rleFile, avail) {
   const iso = tile.extraType >= 1 && tile.extraType <= 4
   if (iso) {
     const len = isoTileSize(tile)
-    drawIso(tile, bytes.subarray(tile.offset, tile.offset + len), collect)
+    drawIso(tile, bytes.subarray(tile.offset, tile.offset + len), collect, options)
   } else {
     const rawLen = tile.width * tile.height
     // RLE si le fichier l'indique, ou si les données sont plus courtes que le

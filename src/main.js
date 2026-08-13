@@ -79,7 +79,7 @@ els.decode.addEventListener('click', async () => {
   els.decode.disabled = true
   try {
     const [pl8Bytes, palBytes] = await Promise.all([readBytes(state.pl8), readBytes(state.pal)])
-    state.sprites = await decodePl8(pl8Bytes, palBytes)
+    state.sprites = await decodePl8(pl8Bytes, palBytes, state.pl8.name)
     renderResults()
     setStatus('')
   } catch (err) {

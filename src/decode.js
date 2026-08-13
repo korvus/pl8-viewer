@@ -7,7 +7,7 @@
 //    - draw.js  : décodage iso / brut / RLE vers RGBA
 //
 //  Contrat attendu par main.js :
-//    decodePl8(pl8Bytes, paletteBytes)
+//    decodePl8(pl8Bytes, paletteBytes, sourceName?)
 //       => Sprite[]   où   Sprite = { name, width, height, rgba: Uint8ClampedArray }
 //
 //  Entrées = Uint8Array fournis par l'UI (l'utilisateur apporte ses fichiers,
@@ -19,6 +19,26 @@ import { parsePl8, availableData } from './pl8/parse.js'
 import { decodeTile } from './pl8/draw.js'
 
 export const DECODER_READY = true
+
+// Le header PL8 décrit la largeur des rangées supplémentaires, mais pas leur
+// géométrie. Ces profils reprennent les interprétations vérifiées contre le
+// rendu DOS ; les planches inconnues conservent le placement historique.
+function tileDrawOptions(sourceName, index) {
+  const name = String(sourceName || '').split(/[\\/]/).pop().toUpperCase()
+
+  if (/^CASTLE1[A-D]\.PL8$/.test(name)) return { edgeExtras: true }
+
+  if (/^TOWN1[A-D]\.PL8$/.test(name)) {
+    if ((index >= 10 && index <= 18) || (index >= 20 && index <= 28)) {
+      return { reverseExtraRows: true, extraOffsetY: -10 }
+    }
+    if ((index >= 30 && index <= 46) || index === 55 || index === 59 || index === 60) {
+      return { edgeExtras: true }
+    }
+  }
+
+  return undefined
+}
 
 // Palette .256 : 256 triplets RGB en VGA 6 bits (0-63) → remis sur 0-255.
 function parsePalette(bytes) {
@@ -36,14 +56,14 @@ function parsePalette(bytes) {
   return palette
 }
 
-export function decodePl8(pl8Bytes, paletteBytes) {
+export function decodePl8(pl8Bytes, paletteBytes, sourceName = '') {
   const palette = parsePalette(paletteBytes)
   const { rle, tiles } = parsePl8(pl8Bytes)
 
   const sprites = []
   tiles.forEach((tile, i) => {
     const avail = availableData(tile, tiles, pl8Bytes.length)
-    const decoded = decodeTile(tile, pl8Bytes, palette, rle, avail)
+    const decoded = decodeTile(tile, pl8Bytes, palette, rle, avail, tileDrawOptions(sourceName, i))
     if (!decoded) return
     sprites.push({
       name: `sprite_${String(i).padStart(3, '0')}`,
