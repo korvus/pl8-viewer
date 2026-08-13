@@ -36,7 +36,10 @@ Pour les planches originales `TOWN1A-D.PL8` et `CASTLE1A-D.PL8`, le viewer
 applique automatiquement les géométries d'« extra rows » validées contre le
 rendu DOS. Cela restitue notamment les tours des châteaux, la roue de la mine
 de fer, les villages et les pales du moulin de la grande ville sans leur
-déformation diagonale. Les autres planches conservent le décodage générique.
+déformation diagonale. La case « Correction isométrique », active par défaut,
+permet de basculer instantanément vers le placement rectangulaire historique
+pour comparer les deux rendus. Les autres planches conservent le décodage
+générique.
 
 ## Licence
 

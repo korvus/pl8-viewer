@@ -23,7 +23,8 @@ export const DECODER_READY = true
 // Le header PL8 décrit la largeur des rangées supplémentaires, mais pas leur
 // géométrie. Ces profils reprennent les interprétations vérifiées contre le
 // rendu DOS ; les planches inconnues conservent le placement historique.
-function tileDrawOptions(sourceName, index) {
+function tileDrawOptions(sourceName, index, enabled) {
+  if (!enabled) return undefined
   const name = String(sourceName || '').split(/[\\/]/).pop().toUpperCase()
 
   if (/^CASTLE1[A-D]\.PL8$/.test(name)) return { edgeExtras: true }
@@ -56,14 +57,15 @@ function parsePalette(bytes) {
   return palette
 }
 
-export function decodePl8(pl8Bytes, paletteBytes, sourceName = '') {
+export function decodePl8(pl8Bytes, paletteBytes, sourceName = '', options = {}) {
   const palette = parsePalette(paletteBytes)
   const { rle, tiles } = parsePl8(pl8Bytes)
 
   const sprites = []
   tiles.forEach((tile, i) => {
     const avail = availableData(tile, tiles, pl8Bytes.length)
-    const decoded = decodeTile(tile, pl8Bytes, palette, rle, avail, tileDrawOptions(sourceName, i))
+    const decoded = decodeTile(tile, pl8Bytes, palette, rle, avail,
+      tileDrawOptions(sourceName, i, options.isometricCorrection !== false))
     if (!decoded) return
     sprites.push({
       name: `sprite_${String(i).padStart(3, '0')}`,

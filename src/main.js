@@ -14,7 +14,7 @@ const els = {
   filePl8: $('file-pl8'), filePal: $('file-pal'),
   dropPl8: $('drop-pl8'), dropPal: $('drop-pal'),
   namePl8: $('name-pl8'), namePal: $('name-pal'),
-  decode: $('btn-decode'), zip: $('btn-zip'),
+  decode: $('btn-decode'), zip: $('btn-zip'), isoCorrection: $('isometric-correction'),
   status: $('status'), results: $('results'), count: $('results-count'), sheet: $('sheet'),
 }
 
@@ -73,13 +73,15 @@ function downloadBlob(blob, filename) {
 }
 
 // --- Décodage ---
-els.decode.addEventListener('click', async () => {
+async function runDecode() {
   if (!(state.pl8 && state.pal)) { setStatus(t('err_need_both'), true); return }
   setStatus(t('decoding'))
   els.decode.disabled = true
   try {
     const [pl8Bytes, palBytes] = await Promise.all([readBytes(state.pl8), readBytes(state.pal)])
-    state.sprites = await decodePl8(pl8Bytes, palBytes, state.pl8.name)
+    state.sprites = await decodePl8(pl8Bytes, palBytes, state.pl8.name, {
+      isometricCorrection: els.isoCorrection.checked,
+    })
     renderResults()
     setStatus('')
   } catch (err) {
@@ -91,6 +93,11 @@ els.decode.addEventListener('click', async () => {
   } finally {
     els.decode.disabled = !(state.pl8 && state.pal)
   }
+}
+
+els.decode.addEventListener('click', runDecode)
+els.isoCorrection.addEventListener('change', () => {
+  if (state.sprites.length) runDecode()
 })
 
 function renderResults() {

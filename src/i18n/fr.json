@@ -8,6 +8,8 @@
   "drop_pal": "Palette .256",
   "drop_none": "aucun fichier",
   "decode_btn": "Décoder",
+  "iso_correction": "Correction isométrique",
+  "iso_correction_hint": "Replace les rangées supplémentaires selon la géométrie DOS connue.",
   "decoding": "Décodage en cours…",
   "results_count": "[n] sprite(s) décodé(s)",
   "download_all": "Tout télécharger (ZIP)",
