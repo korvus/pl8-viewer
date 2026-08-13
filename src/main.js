@@ -14,7 +14,7 @@ const els = {
   filePl8: $('file-pl8'), filePal: $('file-pal'),
   dropPl8: $('drop-pl8'), dropPal: $('drop-pal'),
   namePl8: $('name-pl8'), namePal: $('name-pal'),
-  decode: $('btn-decode'), zip: $('btn-zip'), isoCorrection: $('isometric-correction'),
+  decode: $('btn-decode'), zip: $('btn-zip'), renderMode: $('render-mode'),
   status: $('status'), results: $('results'), count: $('results-count'), sheet: $('sheet'),
 }
 
@@ -79,9 +79,7 @@ async function runDecode() {
   els.decode.disabled = true
   try {
     const [pl8Bytes, palBytes] = await Promise.all([readBytes(state.pl8), readBytes(state.pal)])
-    state.sprites = await decodePl8(pl8Bytes, palBytes, state.pl8.name, {
-      isometricCorrection: els.isoCorrection.checked,
-    })
+    state.sprites = await decodePl8(pl8Bytes, palBytes, { renderMode: els.renderMode.value })
     renderResults()
     setStatus('')
   } catch (err) {
@@ -96,7 +94,7 @@ async function runDecode() {
 }
 
 els.decode.addEventListener('click', runDecode)
-els.isoCorrection.addEventListener('change', () => {
+els.renderMode.addEventListener('change', () => {
   if (state.sprites.length) runDecode()
 })
 
@@ -109,7 +107,7 @@ function renderResults() {
     const cap = document.createElement('figcaption')
     cap.textContent = sprite.name
     fig.append(canvas, cap)
-    fig.title = `${sprite.width}×${sprite.height}`
+    fig.title = `${sprite.width}×${sprite.height} · ${t(`render_mode_${sprite.renderMode}`)}`
     fig.addEventListener('click', async () => {
       const png = await new Promise((r) => canvas.toBlob(r, 'image/png'))
       downloadBlob(png, `${sprite.name}.png`)

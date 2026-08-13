@@ -62,11 +62,16 @@
         </div>
 
         <label class="decode-option">
-          <input type="checkbox" id="isometric-correction" checked />
           <span>
-            <strong data-i18n="iso_correction">Correction isométrique</strong>
-            <small data-i18n="iso_correction_hint">Replace les rangées supplémentaires selon la géométrie DOS connue.</small>
+            <strong data-i18n="render_mode">Rendu des rangées supplémentaires</strong>
+            <small data-i18n="render_mode_hint">Automatique analyse chaque sprite sans dépendre de son jeu ou de son index.</small>
           </span>
+          <select id="render-mode">
+            <option value="auto" data-i18n="render_mode_auto">Automatique</option>
+            <option value="standard" data-i18n="render_mode_standard">Rangées standard</option>
+            <option value="edges" data-i18n="render_mode_edges">Arêtes isométriques</option>
+            <option value="reversed" data-i18n="render_mode_reversed">Rangées inversées</option>
+          </select>
         </label>
 
         <button class="btn" id="btn-decode" disabled data-i18n="decode_btn">Décoder</button>
